@@ -1,46 +1,47 @@
 package week9;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import java.util.Arrays;
+import java.util.List;
 
 public class Main {
     public static void main(String[] args) {
         try {
             ObjectMapper mapper = new ObjectMapper();
 
-            // Create a Person object
-            Person person = new Person("Alice", 30);
+            // Create a list of people
+            List<Person> people = Arrays.asList(
+                    new Person(
+                            "Alice", 30, "alice@example.com",
+                            List.of("Reading", "Hiking"),
+                            new Address("123 Maple St", "Springfield", "12345")
+                    ),
+                    new Person(
+                            "Bob", 25, "bob@example.com",
+                            List.of("Gaming", "Cooking"),
+                            new Address("456 Oak Ave", "Shelbyville", "54321")
+                    ),
+                    new Person(
+                            "Charlie", 40, "charlie@example.com",
+                            List.of("Cycling"),
+                            new Address("789 Pine Rd", "Ogdenville", "67890")
+                    )
+            );
 
-            // Serialize: Java object to JSON string
-            String json = mapper.writeValueAsString(person);
-            System.out.println("Serialized JSON: " + json);
+            // Serialize list of people to JSON string
+            String json = mapper.writeValueAsString(people);
+            System.out.println("Serialized JSON:\n" + json);
 
-            // Deserialize: JSON string back to Java object
-            Person person2 = mapper.readValue(json, Person.class);
-            System.out.println("Deserialized Person name: " + person2.getName());
-            System.out.println("Deserialized Person age: " + person2.getAge());
+            // Deserialize JSON string back to List<Person>
+            List<Person> deserializedPeople = mapper.readValue(json, new TypeReference<List<Person>>() {});
+            System.out.println("\nDeserialized People:");
+            for (Person p : deserializedPeople) {
+                System.out.println(p.getName() + " from " + p.getAddress().getCity() + ", hobbies: " + p.getHobbies());
+            }
 
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
-}
-
-class Person {
-    private String name;
-    private int age;
-
-    // Default constructor needed for Jackson
-    public Person() {}
-
-    public Person(String name, int age) {
-        this.name = name;
-        this.age = age;
-    }
-
-    // Getters and setters
-    public String getName() { return name; }
-    public void setName(String name) { this.name = name; }
-
-    public int getAge() { return age; }
-    public void setAge(int age) { this.age = age; }
 }
