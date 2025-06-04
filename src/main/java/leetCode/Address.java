@@ -1,4 +1,4 @@
-package week9;
+package leetCode;
 
 public class Address {
     private String street;
