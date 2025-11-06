@@ -1,4 +1,4 @@
-package leetCode;
+import java.util.Arrays;
 
 // leetcode 1913
 public int Max(int[] nums) {
@@ -13,4 +13,14 @@ public int Max(int[] nums) {
         }
     }
     return (nums[n-2] * nums[n-1]) - (nums[0]* nums[1]);
+}
+
+public int maxProductDifference(int[] nums) {
+    int ans =0;
+    int n = nums.length;
+    Arrays.sort(nums);
+    return(nums[n-2]*nums[n-1])-(nums[0]*nums[1]);
+}
+
+public void main() {
 }
